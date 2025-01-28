@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,15 +19,26 @@ type Inputs = {
 };
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
-    watch,
+    setError,
     formState: { errors },
   } = useForm<Inputs>();
   const { login } = useAuth();
-  const onSubmit: SubmitHandler<Inputs> = (values: Inputs) => {
-    login(values);
+  const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
+    const { success, message } = await login(values);
+
+    if (success) {
+      navigate("/dashboard"); // Redirect to login
+    } else {
+      setError("root", {
+        type: "manual",
+        message,
+      });
+    }
   };
 
   return (
@@ -70,6 +81,12 @@ export default function Login() {
                       required
                       {...register("password")}
                     />
+
+                    {errors.root && (
+                      <Label className="text-red-500">
+                        {errors.root.message}
+                      </Label>
+                    )}
                   </div>
                   <Button type="submit" className="w-full">
                     Login

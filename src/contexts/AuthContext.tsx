@@ -1,3 +1,6 @@
+import { fetchApi } from "@/api/api";
+import { ILoginResponse } from "@/api/api.types";
+
 import { createContext, useContext, ReactNode } from "react";
 import { useNavigate } from "react-router";
 
@@ -7,7 +10,9 @@ interface loginDto {
   password: string;
 }
 interface AuthContextType {
-  login: (userData: loginDto) => void;
+  login: (
+    userData: loginDto
+  ) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   isAuthenticated: () => boolean;
 }
@@ -19,11 +24,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
-  const login = (userData: loginDto) => {
-    // post to login. and save jwt
-    console.log(userData);
-    localStorage.setItem("jwt", "userData"); // Store the token
-    navigate("/dashboard"); // Redirect to login
+  const login = async (userData: loginDto) => {
+    try {
+      const result = await fetchApi<ILoginResponse>("auth/login", {
+        body: JSON.stringify(userData),
+        method: "POST",
+      });
+      if (result.error) {
+        return { success: false, message: result.message };
+      }
+
+      localStorage.setItem("jwt", result.jwt ?? ""); // Store the token
+      return { success: true };
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: "An unexpected error happened" };
+    }
   };
 
   const logout = () => {
