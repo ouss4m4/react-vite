@@ -36,7 +36,7 @@ export default function PrivateLayout() {
           )}
         </Button>
       </div>
-      <div className="flex-grow ">
+      <div className="flex-grow max-h-screen overflow-y-auto">
         <Outlet />
       </div>
     </div>
