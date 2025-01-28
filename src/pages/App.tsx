@@ -6,6 +6,7 @@ import PrivateLayout from "@/layouts/PrivateLayout";
 import PublicLayout from "@/layouts/PublicLayout";
 import { Route, Routes } from "react-router";
 import Home from "./Home";
+import Campaigns from "./Campaign";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route element={<PrivateLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="settings" element={<Dashboard />} />
+          <Route path="campaigns" element={<Campaigns />} />
         </Route>
       </Route>
       <Route element={<PublicLayout />}>
