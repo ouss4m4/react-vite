@@ -141,3 +141,10 @@ export interface IPlacement {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type IUserDTO = {
+  email: string;
+  name?: string; // Optional for login mode
+  password: string;
+  password2?: string; // Optional for login mode
+};

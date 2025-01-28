@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
 import { Link } from "react-router";
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
     <div>
       <header
@@ -27,6 +26,4 @@ const Home: React.FC = () => {
       </main>
     </div>
   );
-};
-
-export default Home;
+}
